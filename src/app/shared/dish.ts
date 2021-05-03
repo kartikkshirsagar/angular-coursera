@@ -1,3 +1,4 @@
+import {Comment} from './comment';
 export class Dish{
     id!: string; // ! is a ts literal which tells bascally that this variable will have a value at runtime
     name!: string;
@@ -7,5 +8,6 @@ export class Dish{
     label!: string;
     description!: string;
     price!:string;
+    comments!:Comment[];
 
 }
