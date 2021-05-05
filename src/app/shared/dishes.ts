@@ -6,7 +6,7 @@ export const DISHES: Dish[] = [
         name: 'Uthappizza',
         image: '/assets/images/uthappizza.jpg',
         category: 'mains',
-        featured: true,
+        featured: false,
         label: 'Hot',
         price: '4.99',
         // tslint:disable-next-line:max-line-length
@@ -49,7 +49,7 @@ export const DISHES: Dish[] = [
         name: 'Zucchipakoda',
         image: '/assets/images/zucchipakoda.jpg',
         category: 'appetizer',
-        featured: false,
+        featured: true,
         label: '',
         price: '1.99',
         description: 'Deep fried Zucchini coated with mildly spiced Chickpea flour batter accompanied with a sweet-tangy tamarind sauce',

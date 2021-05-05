@@ -23,6 +23,7 @@
                 <mat-card-actions>
                     <button mat-button>LIKE</button>
                     <button mat-button>SHARE</button>
+                    <button mat-button (click)="goBack()">Go Back</button>
                 </mat-card-actions>
             </mat-card>
         </div>
@@ -32,7 +33,6 @@
         <div fxFlex *ngIf="dish">
             <h1>Comments</h1>
             <mat-list>
-                <mat-list-item></mat-list-item>
                 <mat-list-item *ngFor="let comment of dish.comments">
                     <p matLine>{{comment.comment}}</p>
                     <p matLine>{{comment.rating}} Stars</p>

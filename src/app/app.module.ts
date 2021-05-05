@@ -20,6 +20,9 @@ import { ContactComponent } from './contact/contact.component';
 
 import {DishService} from './services/dish.service';
 import {AppRoutingModule} from './app-routing/app-routing.module';
+import {PromotionService} from './services/promotion.service';
+import {LeaderService} from './services/leader.service';
+import { Leader } from './shared/leader';
 
 @NgModule({
   declarations: [
@@ -45,6 +48,8 @@ import {AppRoutingModule} from './app-routing/app-routing.module';
   ],
   providers: [
     DishService,
+    PromotionService,
+    LeaderService,
   ],
   bootstrap: [AppComponent]
 })
