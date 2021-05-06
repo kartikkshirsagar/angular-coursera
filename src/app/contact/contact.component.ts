@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit,ViewChild } from '@angular/core';
 import { FormBuilder,FormGroup,Validators } from '@angular/forms';
 import { Feedback,ContactType } from '../shared/feedback';
 @Component({
@@ -11,7 +11,7 @@ export class ContactComponent implements OnInit {
   feedbackForm!: FormGroup;
   feedback!:Feedback;
   contactType = ContactType;
-
+  @ViewChild('fform') feedbackFormDirective: any;
   constructor(private fb:FormBuilder) {
     this.createForm();
    }
@@ -20,18 +20,27 @@ export class ContactComponent implements OnInit {
   }
   createForm(): void {
     this.feedbackForm  = this.fb.group({
-      firstname:'',
-      lastname:'',
-      telnum:0,
-      email:'',
+      firstname:['',Validators.required],
+      lastname:['',Validators.required],
+      telnum:[0,Validators.required],
+      email:['',Validators.required],
       agree:false,
       contactType: 'None',
-      message:'',
+      message:['',Validators.required],
     })
   }
 
   onSubmit(){
     this.feedback = this.feedbackForm.value;
-    this.feedbackForm.reset();
+    this.feedbackForm.reset({
+      firstname:'',
+      lastname:'',
+      telnum:0,
+      email:'',
+      agree:false,
+      contactType:'None',
+      message:'',
+    }); //can be passed an object with default/initial values
+    this.feedbackFormDirective.resetForm();
   }
 }

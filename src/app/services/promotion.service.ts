@@ -9,14 +9,29 @@ export class PromotionService {
 
   constructor() { }
 
-  getPromotions(): Promotion[]{
-    return PROMOTIONS;
+  getPromotions(): Promise<Promotion[]>{
+    return new Promise(
+      resolve => {
+        setTimeout(() =>resolve(PROMOTIONS));
+      }
+    );
+    // return Promise.resolve(PROMOTIONS);
   }
 
-  getPromotion(id:string):Promotion{
-    return PROMOTIONS.filter((promotion) => promotion.id === id)[0];
+  getPromotion(id:string):Promise<Promotion>{
+    return new Promise(
+      resolve => {
+        setTimeout(() => resolve(PROMOTIONS.filter((promo)=>promo.id === id)[0]),2000);
+      }
+    );
+    // return Promise.resolve(PROMOTIONS.filter((promotion) => promotion.id === id)[0]);
   }
-  getFeaturedPromotion():Promotion{
-    return PROMOTIONS.filter((promotion) => promotion.featured )[0]; //promotion.featured === true is same as promotion.featured coz boolean
+  getFeaturedPromotion():Promise<Promotion>{
+    return new Promise(
+      resolve => {
+        setTimeout(() =>resolve(PROMOTIONS.filter((promo)=>promo.featured)[0]),2000);
+      }
+    );
+    // return Promise.resolve(PROMOTIONS.filter((promotion) => promotion.featured )[0]); //promotion.featured === true is same as promotion.featured coz boolean
   }
 }
