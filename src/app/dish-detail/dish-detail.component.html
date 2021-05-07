@@ -36,7 +36,7 @@
         </div>
     </div>
 
-    <div fxFlex="40">
+    <div fxFlex="40" fxLayout="column">
         <div fxFlex *ngIf="dish">
             <h1>Comments</h1>
             <mat-list>
@@ -45,12 +45,46 @@
                     <p matLine>{{comment.rating}} Stars</p>
                     <p matLine>-- {{comment.author}} {{comment.date | date:'mediumDate'}}</p>
                 </mat-list-item>
+                <mat-list-item *ngIf="commentForm.valid">
+                    <p matLine>{{commentForm.value.comment}}</p>
+                    <p matLine>{{commentForm.value.rating}} Stars</p>
+                    <p matLine>-- {{commentForm.value.author}}</p>
+                </mat-list-item>
             </mat-list>
         </div>
         <div [hidden]="dish">
             <mat-spinner mode="indeterminate"></mat-spinner>
             <h4>Loading. . . Please Wait</h4>
         </div>
+        <div fxFlex fxFlexOffset="20px" *ngIf="dish">
+            <form novalidate [formGroup]="commentForm" #cform="ngForm" (ngSubmit) = "onSubmit()"> 
+                <p>
+                  <mat-form-field class="half-width">
+                    <input matInput formControlName="author" placeholder="Name" type="text" required>
+                    <mat-error *ngIf="formErrors.author">
+                        {{formErrors.name}}
+                    </mat-error>
+                  </mat-form-field>
+                </p>    
+                <p>
+                    Your Rating
+                </p>
+                <mat-slider formControlName="rating" thumbLabel tickInterval="1" min="1" max="5"></mat-slider>                        
+                <p>
+                  <mat-form-field class="full-width">
+                    <textarea matInput formControlName="comment" placeholder="Your Comment" rows=3 required>
+                    </textarea>
+                    <mat-error *ngIf="formErrors.comment">
+                        {{formErrors.comment}}
+                    </mat-error>
+                  </mat-form-field>
+                </p>
+                <button mat-button type="submit" 
+                        class="background-primary text-floral-white" 
+                        [disabled] = "commentForm.invalid">
+                Submit
+                </button>
+              </form>
+        </div>
     </div>
-
 </div>
