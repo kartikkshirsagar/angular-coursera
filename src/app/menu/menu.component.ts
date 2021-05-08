@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-
+import {Inject} from '@angular/core';
 
 import {Dish} from '../shared/dish';
 import {DishDetailComponent} from '../dish-detail/dish-detail.component';
@@ -14,12 +14,14 @@ export class MenuComponent implements OnInit {
 
   dishes!: Dish[]; 
   selectedDish!: Dish;
+  errMess!:string;
 
-  constructor(private dishservice:DishService) { }
+  constructor(private dishservice:DishService, @Inject('BaseURL') public BaseURL:string) { }
 
   ngOnInit(): void {
     this.dishservice.getDishes()
-    .subscribe((dishes) => this.dishes=dishes);
+    .subscribe((dishes) => this.dishes=dishes,
+    errMess => this.errMess = <any>errMess);
   }
 
   onSelect(dish:Dish){

@@ -14,7 +14,7 @@
                         <h3>{{dish.name | uppercase}}</h3>
                     </mat-card-title>
                 </mat-card-header>
-                <img mat-card-image src="{{dish.image}}" alt="{{dish.name}}">
+                <img mat-card-image src="{{baseURL + dish.image}}" alt="{{dish.name}}">
                 <mat-card-content>
                     <p>
                         {{dish.description}}
@@ -52,9 +52,13 @@
                 </mat-list-item>
             </mat-list>
         </div>
-        <div [hidden]="dish">
+        <div [hidden]="dish || errMess">
             <mat-spinner mode="indeterminate"></mat-spinner>
             <h4>Loading. . . Please Wait</h4>
+        </div>
+        <div fxFlex *ngIf="errMess">
+            <h2>Error</h2>
+            <h4>{{errMess}}</h4>    
         </div>
         <div fxFlex fxFlexOffset="20px" *ngIf="dish">
             <form novalidate [formGroup]="commentForm" #cform="ngForm" (ngSubmit) = "onSubmit()"> 

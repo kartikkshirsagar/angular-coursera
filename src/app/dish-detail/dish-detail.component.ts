@@ -6,6 +6,7 @@ import {DishService} from '../services/dish.service';
 import { switchMap } from 'rxjs/operators';
 import { FormBuilder, FormGroup,Validators } from '@angular/forms';
 import {Comment} from '../shared/comment';
+import {Inject} from '@angular/core';
 
 @Component({
   selector: 'app-dish-detail',
@@ -20,6 +21,8 @@ export class DishDetailComponent implements OnInit {
     next!:string;
     commentForm!:FormGroup;
     comment!:Comment;
+    errMess!:string;
+    dishCopy!:Dish;
 
     formErrors: any = {
       'author':'',
@@ -44,7 +47,11 @@ export class DishDetailComponent implements OnInit {
 
     @ViewChild('cform') commentFormDirective: any;
 
-    constructor(private dishService:DishService,private location:Location,private route:ActivatedRoute,private fb: FormBuilder) {
+    constructor(private dishService:DishService,
+                private location:Location,
+                private route:ActivatedRoute,
+                private fb: FormBuilder,
+                @Inject('BaseURL') public baseURL:string) {
       this.createForm();
      }
      createForm(){
@@ -66,8 +73,9 @@ export class DishDetailComponent implements OnInit {
       .pipe(switchMap((params:Params) => this.dishService.getDish(params['id']))) //get id from /dishdetail/'id'
       .subscribe((dish) => {
         this.dish=dish;
+        this.dishCopy = dish;
         this.setPrevNext(dish.id);
-      });
+      },errMess =>  this.errMess = <any>errMess);
     }
 
     setPrevNext(dishId:string){
@@ -92,7 +100,17 @@ export class DishDetailComponent implements OnInit {
         author: this.comment.author,
         date:new Date().toISOString(),
       }
-      this.dish.comments.push(com);
+      this.dishCopy.comments.push(com);
+      this.dishService.putDish(this.dishCopy)
+      .subscribe(dish => {
+        this.dish = dish;
+        this.dishCopy=dish;
+    },
+    errmess => {
+      this.dish = new Dish();
+      this.dishCopy=new Dish();
+      this.errMess = <any>errmess;  
+    });
     }
 
     valueChange(data?:any){
