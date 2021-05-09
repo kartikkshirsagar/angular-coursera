@@ -1,16 +1,28 @@
 import { Component, OnInit,ViewChild } from '@angular/core';
 import { FormBuilder,FormGroup,Validators } from '@angular/forms';
 import { Feedback,ContactType } from '../shared/feedback';
+import { flyInOut } from '../animations/app.animation';
+import { FeedbackService } from '../services/feedback.service';
 @Component({
   selector: 'app-contact',
   templateUrl: './contact.component.html',
-  styleUrls: ['./contact.component.scss']
+  styleUrls: ['./contact.component.scss'],
+  host:{
+    '[@flyInOut]':'true',
+    'style' : 'display:block',
+},
+animations:[
+  flyInOut.trig
+]
 })
 export class ContactComponent implements OnInit {
 
   feedbackForm!: FormGroup;
   feedback!:Feedback;
   contactType = ContactType;
+  feedbackCopy!:Feedback;
+  submitted:boolean = false;
+  dataLoaded:boolean = false;
   @ViewChild('fform') feedbackFormDirective: any;
 
   formErrors: any = {
@@ -41,11 +53,12 @@ export class ContactComponent implements OnInit {
     },
   };
 
-  constructor(private fb:FormBuilder) {
+  constructor(private fb:FormBuilder,private feedbackService:FeedbackService) {
     this.createForm();
    }
 
   ngOnInit(): void {
+    // this.feedbackService.getFeeds().subscribe(feed => this.feedbackCopy = feed);
   }
   createForm(): void {
     this.feedbackForm  = this.fb.group({
@@ -85,7 +98,9 @@ export class ContactComponent implements OnInit {
 
 
   onSubmit(){
+    this.submitted=true;
     this.feedback = this.feedbackForm.value;
+    // this.feedbackCopy=this.feedback;
     this.feedbackForm.reset({
       firstname:'',
       lastname:'',
@@ -95,6 +110,17 @@ export class ContactComponent implements OnInit {
       contactType:'None',
       message:'',
     }); //can be passed an object with default/initial values
+    this.feedbackService.submitFeedback(this.feedback)
+    .subscribe(data => {this.feedbackCopy=data;this.dataLoaded=true;this.submitted=false;}); //submit on server
+    //5 second 
+    this.submitted=true;
+    this.dataLoaded=false;
+    setTimeout(() =>{
+      this.submitted=false;
+      this.dataLoaded=false;
+    } ,5000);
     this.feedbackFormDirective.resetForm();
+    console.log(this.feedbackCopy);
   }
+
 }

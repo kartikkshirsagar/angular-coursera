@@ -3,16 +3,22 @@ import {Leader} from '../shared/leader';
 import {LEADERS} from '../shared/leaders';
 import {Observable,of} from 'rxjs';
 import {delay} from 'rxjs/operators';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
+import { baseURL } from '../shared/baseurl';
+import {map} from 'rxjs/operators';
+import { catchError } from 'rxjs/operators';
+import { ProcessHttpMessageService } from './process-http-message.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class LeaderService {
 
-  constructor() { }
+  constructor(private http: HttpClient,private phms:ProcessHttpMessageService) { }
   
   getLeaders(): Observable<Leader[]>{
-    return of(LEADERS).pipe(delay(2000));
+    return this.http.get<Leader[]>(baseURL + 'leadership')
+    .pipe(catchError(this.phms.handleError));
 
     
     // return new Promise(
@@ -23,7 +29,8 @@ export class LeaderService {
   }
 
   getLeader(id:string): Observable<Leader>{
-    return of(LEADERS.filter((leader)=>leader.id === id)[0]).pipe(delay(2000));
+    return this.http.get<Leader>(baseURL + 'leadership/' + id)
+    .pipe(catchError(this.phms.handleError));
 
     // return new Promise(
     //   resolve => {
@@ -34,7 +41,8 @@ export class LeaderService {
   }
 
   getFeaturedLeader(): Observable<Leader>{
-    return of(LEADERS.filter((leader)=>leader.featured)[0]).pipe(delay(2000));
+    return this.http.get<Leader[]>(baseURL + 'leadership?featured=true')
+    .pipe(map(leader => leader[0]),catchError(this.phms.handleError));
     
     // return new Promise(
     //   resolve => {

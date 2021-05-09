@@ -36,7 +36,21 @@
     </div>
   </div>
 
-  <div FxFlex FxFlexOffset="20px" class="form-size">
+
+  <div fxFlex FxFlexOffset="20px" class="form-size" [hidden]="!submitted && !dataLoaded">
+    <mat-spinner mode="indeterminate"></mat-spinner>
+    <h4>Submitting. . . Please Wait</h4>
+</div>
+<div fxFlex FxFlexOffset="20px" class="form-size" *ngIf="dataLoaded && !submitted">
+  <h2>Your feedback</h2>
+  <p>FirstName: {{this.feedback.firstname}}</p>
+  <p>LastName: {{this.feedback.lastname}}</p>
+  <p>Tel: {{this.feedback.telnum}}</p>
+  <p>Email: {{this.feedback.email}}</p>
+  <p>Feedback: {{this.feedback.message}}</p>
+</div>
+
+  <div FxFlex FxFlexOffset="20px" class="form-size" *ngIf="!submitted && !dataLoaded">
     <h3>Send us your feedback</h3>
     <form novalidate [formGroup]="feedbackForm" #fform="ngForm" (ngSubmit) = "onSubmit()"> 
       <p>
@@ -72,7 +86,7 @@
           <mat-slide-toggle formControlName="agree">May we contact you?</mat-slide-toggle> 
         </td>
         <td>
-          <mat-select placeholder="How?" formControlName="contacttype">
+          <mat-select placeholder="How?" formControlName="contactType">
             <mat-option *ngFor="let option of contactType" [value] = "option">{{option}}</mat-option>
           </mat-select>
         </td>

@@ -36,10 +36,12 @@ import {AppRoutingModule} from './app-routing/app-routing.module';
 import {PromotionService} from './services/promotion.service';
 import {LeaderService} from './services/leader.service';
 import { ProcessHttpMessageService } from './services/process-http-message.service';
+import { FeedbackService } from './services/feedback.service';
 import { LoginComponent } from './login/login.component';
 
 
 import { baseURL } from './shared/baseurl';
+import { HighlightDirective } from './directives/highlight.directive';
 @NgModule({
   declarations: [
     AppComponent,
@@ -51,6 +53,7 @@ import { baseURL } from './shared/baseurl';
     AboutComponent,
     ContactComponent,
     LoginComponent,
+    HighlightDirective,
   ],
   imports: [
     BrowserModule,
@@ -80,6 +83,7 @@ import { baseURL } from './shared/baseurl';
     LeaderService,
     {provide:'BaseURL',useValue:baseURL},
     ProcessHttpMessageService,
+    FeedbackService,
   ],
   entryComponents: [
     LoginComponent,

@@ -7,11 +7,22 @@ import { switchMap } from 'rxjs/operators';
 import { FormBuilder, FormGroup,Validators } from '@angular/forms';
 import {Comment} from '../shared/comment';
 import {Inject} from '@angular/core';
+import { visibility } from '../animations/app.animation';
+import { flyInOut,expand } from '../animations/app.animation';
 
 @Component({
   selector: 'app-dish-detail',
   templateUrl: './dish-detail.component.html',
-  styleUrls: ['./dish-detail.component.scss']
+  styleUrls: ['./dish-detail.component.scss'],
+  host:{
+    '[@flyInOut]':'true',
+    'style' : 'display:block',
+  },
+  animations:[
+    flyInOut.trig,
+    visibility.trig,
+    expand.trig
+  ]
 })
 export class DishDetailComponent implements OnInit {
 
@@ -23,6 +34,7 @@ export class DishDetailComponent implements OnInit {
     comment!:Comment;
     errMess!:string;
     dishCopy!:Dish;
+    visibility:string = 'shown';
 
     formErrors: any = {
       'author':'',
@@ -70,11 +82,16 @@ export class DishDetailComponent implements OnInit {
       .subscribe((dishIds) => this.dishIds = dishIds);
 
       let id = this.route.params
-      .pipe(switchMap((params:Params) => this.dishService.getDish(params['id']))) //get id from /dishdetail/'id'
+      .pipe(switchMap((params:Params) => {
+        this.visibility = 'hidden';
+        return this.dishService.getDish(params['id']);
+      })) //get id from /dishdetail/'id'
       .subscribe((dish) => {
         this.dish=dish;
         this.dishCopy = dish;
         this.setPrevNext(dish.id);
+        this.visibility = 'shown';
+        // console.log(this.visibility);
       },errMess =>  this.errMess = <any>errMess);
     }
 
